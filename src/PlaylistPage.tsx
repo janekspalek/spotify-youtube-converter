@@ -101,7 +101,7 @@ export default function PlaylistPage() {
               Convert all <ArrowRight />
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-h-[900px] overflow-auto">
+          <DialogContent className="max-h-[500px] md:max-h-[900px] overflow-auto">
             <DialogTitle>{playlist?.name}</DialogTitle>
             {loadingUrls ? (
               <div className="w-full">
