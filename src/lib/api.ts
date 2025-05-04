@@ -3,7 +3,8 @@ import { Song } from "@/types/song";
 const scope =
   "playlist-read-private playlist-read-collaborative user-read-email";
 const clientId = "69570d46baf848b6b0e64a6f27412083";
-const redirectUri = "https://spotify-youtube-converter.onrender.com";
+// const redirectUri = "https://spotify-youtube-converter.onrender.com";
+const redirectUri = "http://127.0.0.1:5173/";
 
 const generateRandomString = (length: number) => {
   const possible =
@@ -140,8 +141,6 @@ export async function fetchPlaylistTracks(
     offset += limit;
   }
 
-  console.log(allTracks);
-
   return allTracks;
 }
 
@@ -156,25 +155,38 @@ export async function fetchPlaylist(id: string, token: string) {
 }
 
 export async function findYoutubeUrl(query: string): Promise<string | null> {
-  const invidiousInstances = [
-    "https://invidious.snopyta.org",
-    "https://invidious.tiekoetter.com",
-    "https://invidious.privacydev.net",
-  ];
+  const apiKey = import.meta.env.VITE_YOUTUBE_API_KEY;
 
-  for (const instance of invidiousInstances) {
-    try {
-      const res = await fetch(
-        `${instance}/api/v1/search?q=${encodeURIComponent(query)}`
-      );
-      const data = await res.json();
-      if (Array.isArray(data) && data.length > 0) {
-        return `https://www.youtube.com/watch?v=${data[0].videoId}`;
-      }
-    } catch (e) {
-      console.warn(`Failed to search on ${instance}`, e);
-    }
+  if (!apiKey) {
+    console.error("Youtube API key was not found.");
+    return null;
   }
 
-  return null;
+  try {
+    const res = await fetch(
+      `https://www.googleapis.com/youtube/v3/search?` +
+        new URLSearchParams({
+          part: "snippet",
+          maxResults: "1",
+          q: query,
+          type: "video",
+          key: apiKey,
+        })
+    );
+
+    const data = await res.json();
+    const item = data.items?.[0];
+
+    if (item && item.id?.videoId) {
+      return `https://www.youtube.com/watch?v=${item.id.videoId}`;
+    } else {
+      console.warn("Youtube video was not found:", query);
+      return null;
+    }
+  } catch (error) {
+    console.error(
+      "An error occured when searching for Youtube video: " + error
+    );
+    return null;
+  }
 }

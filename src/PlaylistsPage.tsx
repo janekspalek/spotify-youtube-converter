@@ -27,7 +27,7 @@ export default function PlaylistsPage() {
         <div>
           <h2 className="p-2 font-medium">My saved playlists</h2>
           {playlists?.map((playlist: Playlist) => (
-            <Link to={playlist.id}>
+            <Link to={playlist.id} key={playlist.id}>
               <PlaylistRow playlist={playlist} key={playlist.id} />
             </Link>
           ))}
