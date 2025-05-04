@@ -155,7 +155,7 @@ export async function fetchPlaylist(id: string, token: string) {
 }
 
 export async function findYoutubeUrl(query: string): Promise<string | null> {
-  const apiKey = import.meta.env.VITE_YOUTUBE_API_KEY;
+  const apiKey = VITE_YOUTUBE_API_KEY;
 
   if (!apiKey) {
     console.error("Youtube API key was not found.");
