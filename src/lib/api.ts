@@ -3,8 +3,8 @@ import { Song } from "@/types/song";
 const scope =
   "playlist-read-private playlist-read-collaborative user-read-email";
 const clientId = "69570d46baf848b6b0e64a6f27412083";
-// const redirectUri = "https://spotify-youtube-converter.onrender.com";
-const redirectUri = "http://127.0.0.1:5173/";
+const redirectUri = "https://spotify-youtube-converter.onrender.com";
+// const redirectUri = "http://127.0.0.1:5173/";
 
 const generateRandomString = (length: number) => {
   const possible =
